@@ -2,12 +2,12 @@ package com.thoughtworks.aep.parkinglot;
 
 import com.thoughtworks.aep.parkinglot.exception.NoEnoughParkingLotException;
 import com.thoughtworks.aep.parkinglot.exception.PickCarFailureException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ParkingLotTest {
 
@@ -27,11 +27,11 @@ public class ParkingLotTest {
         assertEquals(2, ticketList.size());
     }
 
-    @Test(expected = NoEnoughParkingLotException.class)
+    @Test
     public void test_should_raise_exception_when_park_one_car_given_no_available_capacity() {
         ParkingLot parkingLot = new ParkingLot(1);
         parkingLot.park(new Car("鄂A888888"));
-        parkingLot.park(new Car("鄂A999999"));
+        assertThrows(NoEnoughParkingLotException.class, () -> parkingLot.park(new Car("鄂A999999")));
     }
 
     @Test
@@ -54,20 +54,21 @@ public class ParkingLotTest {
         assertEquals(myCar, pickedCar);
     }
 
-    @Test(expected = PickCarFailureException.class)
+    @Test
     public void test_should_raise_exception_when_pick_given_invalid_ticket_and_my_car_in_lot() {
         ParkingLot parkingLot = new ParkingLot(2);
         Car myCar = new Car("鄂A888888");
         parkingLot.park(myCar);
-        parkingLot.pick(new Ticket(parkingLot.getName(),"Invalid Ticket"));
+        assertThrows(PickCarFailureException.class,
+                () -> parkingLot.pick(new Ticket(parkingLot.getName(),"Invalid Ticket")));
     }
 
-    @Test(expected = PickCarFailureException.class)
+    @Test
     public void test_should_raise_exception_when_pick_car_twice_given_same_valid_ticket() {
         ParkingLot parkingLot = new ParkingLot(2);
         Car myCar = new Car("鄂A888888");
         Ticket ticket = parkingLot.park(myCar);
         parkingLot.pick(ticket);
-        parkingLot.pick(ticket);
+        assertThrows(PickCarFailureException.class, () -> parkingLot.pick(ticket));
     }
 }

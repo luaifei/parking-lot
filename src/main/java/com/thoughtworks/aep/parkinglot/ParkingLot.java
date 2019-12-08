@@ -16,6 +16,7 @@ public class ParkingLot {
     private String name;
     @Getter
     private int size;
+    @Getter
     private int capacity;
     private Map<Ticket, Car> parkingCars;
 
