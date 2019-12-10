@@ -5,6 +5,7 @@ import com.thoughtworks.aep.parkinglot.exception.PickCarFailureException;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ParkingBoy {
 
@@ -12,9 +13,7 @@ public class ParkingBoy {
     private List<ParkingLot> managedParkingLots;
 
     public Ticket park(Car car) {
-        if (managedParkingLots == null) {
-            throw new NoEnoughParkingLotException();
-        }
+        Optional.of(managedParkingLots).orElseThrow(NoEnoughParkingLotException::new);
 
         return managedParkingLots.stream()
                 .filter(parkingLot -> parkingLot.getCapacity() > 0)
@@ -24,9 +23,8 @@ public class ParkingBoy {
     }
 
     public Car pick(Ticket ticket) {
-        if (managedParkingLots == null) {
-            throw new PickCarFailureException();
-        }
+        Optional.of(managedParkingLots).orElseThrow(PickCarFailureException::new);
+
         return managedParkingLots.stream()
                 .filter(parkingLot -> ticket.getParkingLotName().equals(parkingLot.getName()))
                 .findFirst()
