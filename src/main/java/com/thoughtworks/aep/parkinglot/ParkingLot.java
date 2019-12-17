@@ -4,10 +4,7 @@ import com.thoughtworks.aep.parkinglot.exception.NoEnoughParkingLotException;
 import com.thoughtworks.aep.parkinglot.exception.PickCarFailureException;
 import lombok.Getter;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ParkingLot {
@@ -59,7 +56,24 @@ public class ParkingLot {
         return car;
     }
 
+    public double getCapacityRate() {
+        return  this.capacity / (double) this.size;
+    }
+
     private Ticket createTicket() {
         return new Ticket(this.name, UUID.randomUUID().toString());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParkingLot that = (ParkingLot) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }
